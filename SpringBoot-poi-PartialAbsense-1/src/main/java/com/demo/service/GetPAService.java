@@ -3,6 +3,7 @@ package com.demo.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +16,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,10 +26,10 @@ public class GetPAService {
 	public static final String Attendance_XLSX_FILE_PATH = Paths.get("filestorage") + "/Java April 2020- Session 10 - Attendee Report.xlsx";
 	public static final String Contracts_XLSX_FILE_PATH = Paths.get("filestorage") + "/ContactsList.xlsx";
 	
-	public void ReadAttendance() throws EncryptedDocumentException, IOException {
+	public Resource ReadAttendance() throws EncryptedDocumentException, IOException {
 		System.out.println(Attendance_XLSX_FILE_PATH);
 		
-
+//		Get the name of the attendance who did show enough time, return set of firstlastNames
 		Set<String> firstLastNames_set = getNameList(Attendance_XLSX_FILE_PATH, 30);
 		
          System.out.println(firstLastNames_set);
@@ -34,7 +37,7 @@ public class GetPAService {
 //       find the person in Contractlist
 		 Workbook workbook2 = WorkbookFactory.create(new File(Contracts_XLSX_FILE_PATH));
 		 Sheet Contract_sheet = workbook2.getSheetAt(0);
-		 
+//		Create new workbook and sheet
 		 Workbook targetbook = new XSSFWorkbook();
 		 Sheet traget_sheet = targetbook.createSheet("Partial Absense list");
 		
@@ -86,9 +89,18 @@ public class GetPAService {
      
          
          File f =  new File(Paths.get("filestorage") + "/PartialAbsenteesList.xlsx");
-         
          FileOutputStream out = new FileOutputStream(f);
          targetbook.write(out);
+         
+         String filename = "PartialAbsenteesList.xlsx";
+         Path file_path = Paths.get("filestorage").resolve(filename);
+         Resource resource = new UrlResource(file_path.toUri());
+         if(resource.exists()) {
+             return resource;
+         }else{
+           throw new RuntimeException("FAIL!");
+         }
+         
          
 		 
 	}
@@ -123,7 +135,7 @@ public class GetPAService {
          
          return firstLastNames;	
 	}
-	
+//  Read the attend time and return in min unit
 	public int getTimeinMins(Cell cell) {
 		DataFormatter formatter = new DataFormatter();
         String data= formatter.formatCellValue(cell);

@@ -1,11 +1,10 @@
 package com.demo.controller.rest;
 
 import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.poi.EncryptedDocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,10 +21,14 @@ public class DownloadPAController {
 	}
 
 	@GetMapping("/downland/partialAbsence.xlsx")
-	public void download_partialAbsence() throws Exception, IOException{
-		getPAService.ReadAttendance();
-	
+	public ResponseEntity<Resource> download_partialAbsence() throws Exception, IOException{
+		Resource file = getPAService.ReadAttendance();
 		
+		ResponseEntity<Resource> temp = ResponseEntity.ok()
+	          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +file.getFilename() + "\"")
+	          .body(file);  
+		
+	    return temp;
 	}
 	
 

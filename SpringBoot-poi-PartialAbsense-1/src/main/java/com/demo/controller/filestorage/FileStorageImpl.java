@@ -35,7 +35,7 @@ public class FileStorageImpl implements FileStorage{
         try {
             Path file = rootLocation.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
-            if(resource.exists() || resource.isReadable()) {
+            if(resource.exists()) {
                 return resource;
             }else{
               throw new RuntimeException("FAIL!");
