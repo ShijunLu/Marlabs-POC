@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>start new application</title>
+
+</head>
+<body>
+	<div align="center">
+		<h1>Create New Load Application</h1>
+		<br />
+		<form action="#" th:action="@{/save}" th:object="${loanRecord}"
+			method="post">
+			<table>
+				<tr>
+					<td>Name:</td>
+					<td><input type="text" th:field="*{name}" /></td>
+				</tr> 
+				<tr>
+					<td>Type:</td>
+					<td><input type="text" th:field ="*{type}" /></td>
+				</tr>
+				<tr>
+					<td>Term:</td>
+					<td><input type="text" th:field="*{term}" /></td>
+				</tr>
+				<tr>
+					<td>Amount:</td>
+					<td><input type="text" th:field="*{amount}" /></td>
+				</tr>
+				<tr>
+					<td>APR:</td>
+					<td><input type="text" th:field="*{apr}" /></td>
+				</tr>
+				<tr>
+					<td>Secured:</td>
+					<td><input type="text" th:field="*{secured}" /></td>
+				</tr>
+				<tr>
+					<td>Start Date:</td>
+					<td><input type="text" th:field="*{start_date}" /></td>
+				</tr>
+				<tr>
+					<td>Description:</td>
+					<td><input type="text" th:field="*{description}" /></td>
+				</tr>
+				<tr>
+					<td>Financial Information:</td>
+					<td><input type="text" th:field="*{financial_infor}" /></td>
+				</tr>
+				<tr>
+					<td>Status:</td>
+					<td><input type="text" th:field="*{status}" /></td>
+				</tr>
+				<tr>
+					<td colspan = "2"><button type = "submit">Submit</button></td>
+				</tr>
+	
+			</table>
+
+		</form>
+	</div>
+
+</body>
+</html>

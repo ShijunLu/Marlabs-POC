@@ -1,0 +1,85 @@
+
+
+
+
+DROP table if exists loan_record;
+DROP table if exists propfiles;
+
+CREATE TABLE `loan_systemdb`.`loan_record` (
+  `id` INT AUTO_INCREMENT,
+  `name` VARCHAR(50) NOT NULL,
+  `type` VARCHAR(50) NOT NULL,
+  `term` INT NOT NULL,
+  `amount` INT NOT NULL,
+  `apr` FLOAT NOT NULL,
+  `secured` BOOLEAN NOT NULL,
+  `start_date` VARCHAR(50) NOT NULL,
+  `description` VARCHAR(255) NOT NULL,
+  `financial_infor` VARCHAR(255) NOT NULL,
+  `status` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`));
+
+INSERT INTO `loan_systemdb`.`loan_record` (`id`, `name`, `type`, `term`, `amount`, `apr`, `secured`, `description`, `financial_infor`, `start_date`, `status`) VALUES ('1', 'for house loan', 'personal loan', '12', '500000', '0.0866', '1', 'buy a apartment in LA', 'submit financial infor documents', '2020-05-20','pending');
+
+
+DROP table if exists users;
+
+CREATE TABLE `loan_systemdb`.`users` (
+  `user_id` INT AUTO_INCREMENT,
+  `username` VARCHAR(50) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
+  `enabled` TINYINT NULL,
+  PRIMARY KEY (`user_id`));
+
+DROP table if exists roles;
+CREATE TABLE `loan_systemdb`.`roles` (
+  `role_id` INT AUTO_INCREMENT,
+  `name` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`role_id`));
+ 
+DROP table if exists users_roles;
+CREATE TABLE `loan_systemdb`.`users_roles` (
+  `user_id` INT NULL,
+  `role_id` INT NULL);
+  
+    
+
+ALTER TABLE `loan_systemdb`.`users_roles` 
+ADD INDEX `role_fk_idx` (`role_id` ASC) VISIBLE;
+;
+ALTER TABLE `loan_systemdb`.`users_roles` 
+ADD CONSTRAINT `user_fk`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `loan_systemdb`.`users` (`user_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `role_fk`
+  FOREIGN KEY (`role_id`)
+  REFERENCES `loan_systemdb`.`roles` (`role_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+  
+ INSERT INTO `loan_systemdb`.`roles` (`name`) VALUES ('USER');
+INSERT INTO `loan_systemdb`.`roles` (`name`) VALUES ('ADMIN');
+INSERT INTO `loan_systemdb`.`roles` (`name`) VALUES ('EDITOR');
+
+
+INSERT INTO `loan_systemdb`.`users` (`username`, `password`, `enabled`) VALUES ('user1', '$2a$10$Ck1wWkAZbfTSlGg9/a8vKusm6G2DdyEfABoK9ovpF2M0iu.fUQc7O', 1);
+INSERT INTO `loan_systemdb`.`users` (`username`, `password`, `enabled`) VALUES ('admin', '$2a$10$m9tE7WUfqp115pyDGDwiyehgJUS4Gxu4i6DERRJRzQEeC5DrvL3DK', 1);
+INSERT INTO `loan_systemdb`.`users` (`username`, `password`, `enabled`) VALUES ('editor', '$2a$10$8jjHKiSjxPj3mdQnI.G0R.ga/RkYpUG4XCUzaQzs4C2F61abPNs.q', 1);
+
+
+
+
+INSERT INTO `loan_systemdb`.`users_roles` (`user_id`, `role_id`) VALUES ('1', '1');
+INSERT INTO `loan_systemdb`.`users_roles` (`user_id`, `role_id`) VALUES ('2', '2');
+INSERT INTO `loan_systemdb`.`users_roles` (`user_id`, `role_id`) VALUES ('3', '1');
+INSERT INTO `loan_systemdb`.`users_roles` (`user_id`, `role_id`) VALUES ('3', '3');
+
+
+
+
+
+
+
+

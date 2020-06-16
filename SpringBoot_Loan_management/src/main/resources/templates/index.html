@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	rel="stylesheet" />
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<title>Loan Record Management</title>
+</head>
+<body>
+	<div align="center">
+	<div sec:authorize="isAuthenticated()">
+		Welcome <b><span sec:authentication="name">Username</span></b>
+		&nbsp;
+		Role: <span sec:authentication = "principal.authorities">Roles</span>
+		<form th:action = "@{/logout}" method = "post">
+			<input type = "submit" value = "Logout"/>
+		</form>
+	</div>
+		<h2>Loan management board</h2>
+		
+		<table id="LoanTable"
+			class="table table-bordered table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Loan ID</th>
+					<th>Loan name</th>
+					<th>Type</th>
+					<th>Term</th>
+					<th>Amount</th>
+					<th>APR</th>
+					<th>Secured</th>
+					<th>Start Date</th>
+					<th>Description</th>
+					<th>Financial Information</th>
+					<th>Status</th>
+					<th sec:authorize = "hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
+				
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="loan: ${listLoanRecords}">
+					<td th:text="${loan.id}">Loan ID</td>
+					<td th:text="${loan.name}">Loan name</td>
+ 					<td th:text="${loan.type}">Type</td>
+					<td th:text="${loan.term} + ' month'">Term</td>
+					<td th:text="'$' + ${loan.amount}">Amount</td>
+					<td th:text="${loan.apr}">APR</td>
+					<td th:text="${loan.secured}">Secured</td>
+					<td th:text="${loan.start_date}">Start Date</td>
+					<td th:text="${loan.description}">Description</td>
+					<td th:text="${loan.financial_infor}">Financial Information</td>
+					<td th:text="${loan.status}">Status</td>
+					<td sec:authorize = "hasAnyAuthority('ADMIN', 'EDITOR')">
+					<a th:href="@{'/edit/' + ${loan.id}}">Edit</a>
+					&nbsp;&nbsp;
+					<a sec:authorize= "hasAuthority('ADMIN')" th:href="@{'/delete/' + ${loan.id}}">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<a href = "new">start new application</a>
+
+	</div>
+
+
+</body>
+</html>
